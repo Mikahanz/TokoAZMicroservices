@@ -1,0 +1,109 @@
+# Rider Specific
+.idea/
+*.sln.iml
+.idea_modules/
+
+# Build Folders
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.swp
+*.suo
+*.userosscache
+*.userprefs
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Rider project settings
+.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/shelf/
+.idea/**/vcs.xml
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/dataSources.xml
+.idea/**/dataSources.local.xml
+.idea/**/target/
+.idea/.idea_modules.xml
+.idea/reporter-ui.xml
+.idea/deployment.xml
+
+# ASP.NET specific
+appsettings.json
+appsettings.Development.json
+
+# Package Management
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Entity Framework
+*.ldf
+*.mdf
+
+# Visual Studio files
+.vs/
+.vscode/
+
+# Rider Plugin
+.idea/.idea/workspace.xml
+.idea/.idea/modules.xml
+.idea/.idea/runConfigurations/
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Coverage Results
+*.coverage
+*.coveragexml
+
+# NUnit
+TestResult.xml
+
+# StyleCop
+StyleCopReport.xml
+
+# DotNet
+!.gitignore
+*.log
+global.json
+.nuget/
+
+# Logs
+**/logs/*
+!**/logs/.gitkeep
+*.log
+
+# Docker files
+**/Dockerfile
+**/docker-compose*
+
+# Ignore build output
+build/
+publish/
+
+# Local Environment Secrets
+secrets.json
+
+# Ignore JetBrains annotations
+resharper/annotations.xml
