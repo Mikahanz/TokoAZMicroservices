@@ -1,12 +1,10 @@
 using BuildingBlocks.CQRS;
 using Catalog.API.Models;
-using MediatR;
 
 namespace Catalog.API.Products.CreateProduct;
 
 public record CreateProductCommand(string Name, List<string> Category, string Description, decimal Price, string ImageFile)
     : ICommand<CreateProductResult>;
-
 public record CreateProductResult(Guid Id);
 
 internal class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, CreateProductResult>

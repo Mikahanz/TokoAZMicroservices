@@ -17,4 +17,8 @@
       <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Carter" Version="9.0.0" />
+    </ItemGroup>
+
 </Project>
