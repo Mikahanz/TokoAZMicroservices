@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BuildingBlocks.Exceptions.Handler;
 
-public class CustomExceptionHandler(Logger<CustomExceptionHandler> logger) : IExceptionHandler
+public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken cancellationToken)
     {
@@ -54,7 +54,7 @@ public class CustomExceptionHandler(Logger<CustomExceptionHandler> logger) : IEx
             Instance = context.Request.Path
         };
 
-        problemDetails.Extensions.Add("tradeId", context.TraceIdentifier);
+        problemDetails.Extensions.Add("traceId", context.TraceIdentifier);
         
         if(exception is ValidationException validationException)
         {
