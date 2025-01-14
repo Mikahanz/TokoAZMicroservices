@@ -14,5 +14,28 @@ services:
     ports:
       - "5432:5432"
 
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+    build:
+      context: .
+      dockerfile: Services/Catalog/Catalog.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORT=8080
+      - ASPNETCORE_HTTPS_PORT=8081
+      - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgres;Include Error Detail=true
+    depends_on:
+      - catalogdb
+    ports:
+      - "6000:8080"
+      - "6060:8081"
+    volumes:
+      # Maps a local directory for development
+      - ./Services/Catalog/Catalog.API:/app
+      # Maps another volume for additional data persistence (optional)
+      - catalog_api_data:/data
+    
+
 volumes:
   postgres_catalog:
+  catalog_api_data:
