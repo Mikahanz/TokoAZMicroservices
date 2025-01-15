@@ -22,8 +22,4 @@
       <PackageReference Include="Marten" Version="7.36.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Basket\DeleteBasket\" />
-    </ItemGroup>
-
 </Project>
