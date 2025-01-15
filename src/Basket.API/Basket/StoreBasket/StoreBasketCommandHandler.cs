@@ -18,7 +18,8 @@ public class StoreBasketCommandHandler(IDocumentSession session) : ICommandHandl
     {
         ShoppingCart cart = command.Cart;
         
-        
+        // To Do:  Store the cart in the database (use Marten upsert - if cart exists, update it, otherwise insert it)
+        // To Do: Update cache (use Redis)
         
         return new StoreBasketResult(command.Cart.UserName);
     }
