@@ -39,3 +39,8 @@ services:
 volumes:
   postgres_catalog:
   catalog_api_data:
+  basket.api:
+    image: basket.api
+    build:
+      context: .
+      dockerfile: Basket.API/Dockerfile
