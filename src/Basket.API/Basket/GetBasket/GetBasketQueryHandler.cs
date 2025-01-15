@@ -7,7 +7,7 @@ public class GetBasketQueryHandler(IDocumentSession session) : IQueryHandler<Get
 {
     public async Task<GetBasketResult> Handle(GetBasketQuery query, CancellationToken cancellationToken)
     {
-        var shoppingCard = await session.LoadAsync<ShoppingCart>(query.UserName);
-        return new GetBasketResult(shoppingCard);
+        // var shoppingCard = await session.LoadAsync<ShoppingCart>(query.UserName);
+        return new GetBasketResult(new ShoppingCart("test"));
     }
 }
