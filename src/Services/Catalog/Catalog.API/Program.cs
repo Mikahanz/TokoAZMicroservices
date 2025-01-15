@@ -1,8 +1,5 @@
-using BuildingBlocks.Behaviors;
 using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
