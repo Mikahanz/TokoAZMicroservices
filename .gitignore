@@ -46,8 +46,8 @@ $RECYCLE.BIN/
 .idea/deployment.xml
 
 # ASP.NET specific
-appsettings.json
-appsettings.Development.json
+#appsettings.json
+#appsettings.Development.json
 
 # Package Management
 *.nupkg
