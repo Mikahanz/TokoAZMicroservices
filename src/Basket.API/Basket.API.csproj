@@ -20,6 +20,7 @@
     <ItemGroup>
       <PackageReference Include="Carter" Version="9.0.0" />
       <PackageReference Include="Marten" Version="7.36.0" />
+      <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.1" />
     </ItemGroup>
 
 </Project>

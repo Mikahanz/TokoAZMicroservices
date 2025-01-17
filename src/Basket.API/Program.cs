@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     // Carter is a library that allows you to create HTTP APIs using a minimalistic approach
     builder.Services.AddCarter();
-
+ 
     // MediatR is a simple, unambitious mediator implementation in .NET
     builder.Services.AddMediatR(config =>
     {
