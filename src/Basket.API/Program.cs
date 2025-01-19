@@ -1,5 +1,6 @@
-using Basket.API.Data;
 using BuildingBlocks.Exceptions.Handler;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,17 +26,33 @@ var builder = WebApplication.CreateBuilder(args);
 
     // Basket Repository
     builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+    builder.Services.Decorate<IBasketRepository, CacheBasketRepository>();
+    // Add Redis Cache
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration.GetConnectionString("Redis")!;
+    });
 
     // Custom Exception Handler
     builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
+    // Health Checks
+    builder.Services.AddHealthChecks().AddNpgSql(builder.Configuration.GetConnectionString("Database")!)
+                                        .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
 
 // End of Services --------------------------------------
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
-app.MapCarter();
-
-app.UseExceptionHandler(options => { });
+    // Configure the HTTP request pipeline
+    app.MapCarter();
+    // Exception Handler
+    app.UseExceptionHandler(options => { });
+    // Health Checks
+    app.UseHealthChecks("/health", 
+        new HealthCheckOptions
+        {
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
 
 app.Run();
