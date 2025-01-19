@@ -46,17 +46,37 @@ services:
     depends_on:
       - catalogdb
     ports:
-      - "6000:8080"
       - "6060:8081"
+      - "6000:8080"
     volumes:
       # Maps a local directory for development
       - ./Services/Catalog/Catalog.API:/app
       # Maps another volume for additional data persistence (optional)
       - catalog_api_data:/data
-    
+  
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: Basket.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORT=8080
+      - ASPNETCORE_HTTPS_PORT=8081
+      - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDb;User Id=postgres;Password=postgres;Include Error Detail=true
+      - ConnectionStrings__Redis=distributedcache:6379
+    depends_on:
+      - basketdb
+      - distributedcache
+    ports:
+      - "6061:8081"
+      - "6001:8080"
+    volumes:
+      - ./Basket.API:/app
+      - basket_api_data:/data
 
 volumes:
   postgres_catalog:
-  catalog_api_data:
   postgres_basket:
-  
+  catalog_api_data:
+  basket_api_data:
