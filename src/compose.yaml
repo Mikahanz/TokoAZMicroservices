@@ -74,6 +74,12 @@ services:
     volumes:
       - ./Basket.API:/app
       - basket_api_data:/data
+        
+  discount.grpc:
+    image: discount.grpc
+    build:
+      context: .
+      dockerfile: Discount.gRPC/Dockerfile
 
 volumes:
   postgres_catalog:
