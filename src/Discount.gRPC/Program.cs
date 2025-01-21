@@ -1,3 +1,4 @@
+using Discount.gRPC;
 using Discount.gRPC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,7 @@ builder.Services.AddGrpcReflection();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.MapGrpcService<GreeterService>();
+app.MapGrpcService<DiscountService>();
 if (app.Environment.IsDevelopment())
     app.MapGrpcReflectionService();
 
