@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Dapper" Version="2.1.35" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.64.0" />
         <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.67.0" />
         <PackageReference Include="Grpc.Tools" Version="2.69.0">
@@ -15,15 +16,8 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Mapster" Version="7.4.2-pre02" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-          <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-          <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.1" />
+        <PackageReference Include="Npgsql" Version="9.0.2" />
     </ItemGroup>
 
     <ItemGroup>

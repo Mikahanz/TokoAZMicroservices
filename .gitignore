@@ -95,7 +95,7 @@ global.json
 *.log
 
 # Docker files
-**/Dockerfile
+!Dockerfile
 **/docker-compose*
 
 # Ignore build output

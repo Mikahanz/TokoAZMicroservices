@@ -1,20 +1,22 @@
+using System.Data;
+using Npgsql;
 using Discount.gRPC.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Discount.gRPC.Data;
 
-public class DiscountContext : DbContext
+public class DiscountContext
 {
-    public DbSet<Coupon> Coupons { get; set; } = default!;
-    public DiscountContext(DbContextOptions<DiscountContext> options) : base(options)
+    private readonly IConfiguration _configuration;
+    private readonly string _connectionString;
+    
+    public DiscountContext(IConfiguration configuration)
     {
+        _configuration = configuration;
+        _connectionString = _configuration.GetConnectionString("Database");
     }
     
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public IDbConnection CreateConnection()
     {
-        modelBuilder.Entity<Coupon>().HasData(
-            new Coupon { Id = 1, ProductName = "IPhone X", Description = "IPhone Discount", Amount = 150 },
-            new Coupon { Id = 2, ProductName = "Samsung 10", Description = "Samsung Discount", Amount = 100 }
-        );
+        return new NpgsqlConnection(_connectionString);
     }
 }
