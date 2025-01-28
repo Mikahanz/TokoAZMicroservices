@@ -80,20 +80,17 @@ public class DiscountService : DiscountProtoService.DiscountProtoServiceBase
         var couponModel = resultCoupon.Adapt<CouponModel>();
         return couponModel;
     }
-    //
-    // public override async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
-    // {
-    //     var coupon = await discountContext
-    //         .Coupons
-    //         .FirstOrDefaultAsync(x => x.ProductName == request.ProductName);
-    //     
-    //     if(coupon is null)
-    //         throw new RpcException(new Status(StatusCode.NotFound, $"Discount with productName: {request.ProductName} is not found"));
-    //     
-    //     discountContext.Coupons.Remove(coupon);
-    //     await discountContext.SaveChangesAsync();
-    //     logger.LogInformation("Discount is successfully deleted. ProductName : {prodName}", coupon.ProductName);
-    //     
-    //     return new DeleteDiscountResponse { Success = true };
-    // }
+    
+    public override async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
+    {
+        const string query = "DELETE FROM \"Coupons\" WHERE \"ProductName\" = @ProductName";
+        var affected = await _dbConnection.ExecuteAsync(query, new { ProductName = request.ProductName });
+        
+        if(affected == 0)
+            throw new RpcException(new Status(StatusCode.Internal, "Failed to delete discount"));
+        
+        logger.LogInformation("Discount is successfully deleted. ProductName : {prodName}", request.ProductName);
+        
+        return new DeleteDiscountResponse { Success = true };
+    }
 }
