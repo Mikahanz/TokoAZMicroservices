@@ -32,20 +32,30 @@ public class DiscountService : DiscountProtoService.DiscountProtoServiceBase
         var couponModel = coupon.Adapt<CouponModel>();
         return couponModel;
     }
-    //
-    // public override async Task<CouponModel> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
-    // {
-    //     var coupon = request.Coupon.Adapt<Coupon>();
-    //     if(coupon is null)
-    //         throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid request object"));
-    //     
-    //     discountContext.Coupons.Add(coupon);
-    //     await discountContext.SaveChangesAsync();
-    //     logger.LogInformation("Discount is successfully created. ProductName : {prodName}", coupon.ProductName);
-    //     
-    //     var couponModel = coupon.Adapt<CouponModel>();
-    //     return couponModel;
-    // }
+    
+    public override async Task<CouponModel> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
+    {
+        var coupon = request.Coupon.Adapt<Coupon>();
+        if(coupon is null)
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid request object"));
+        
+        const string query = "INSERT INTO \"Coupons\" (\"ProductName\", \"Description\", \"Amount\") VALUES (@ProductName, @Description, @Amount) RETURNING *";
+        var resultCoupon = await _dbConnection.QueryFirstOrDefaultAsync<Coupon>(query, new
+        {
+            ProductName = coupon.ProductName,
+            Description = coupon.Description,
+            Amount = coupon.Amount
+        });
+        
+        if (resultCoupon is null)
+            throw new RpcException(new Status(StatusCode.Internal, "Failed to create discount"));
+        
+        logger.LogInformation($"Result : {resultCoupon}");
+        logger.LogInformation("Discount is successfully created. ProductName : {prodName}", coupon.ProductName);
+        
+        var couponModel = resultCoupon.Adapt<CouponModel>();
+        return couponModel;
+    }
     //
     // public override async Task<CouponModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
     // {
