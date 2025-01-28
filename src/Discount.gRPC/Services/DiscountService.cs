@@ -35,41 +35,51 @@ public class DiscountService : DiscountProtoService.DiscountProtoServiceBase
     
     public override async Task<CouponModel> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
     {
-        var coupon = request.Coupon.Adapt<Coupon>();
-        if(coupon is null)
+        var requestCoupon = request.Coupon.Adapt<Coupon>();
+        if(requestCoupon is null)
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid request object"));
         
         const string query = "INSERT INTO \"Coupons\" (\"ProductName\", \"Description\", \"Amount\") VALUES (@ProductName, @Description, @Amount) RETURNING *";
         var resultCoupon = await _dbConnection.QueryFirstOrDefaultAsync<Coupon>(query, new
         {
-            ProductName = coupon.ProductName,
-            Description = coupon.Description,
-            Amount = coupon.Amount
+            ProductName = requestCoupon.ProductName,
+            Description = requestCoupon.Description,
+            Amount = requestCoupon.Amount
         });
         
         if (resultCoupon is null)
             throw new RpcException(new Status(StatusCode.Internal, "Failed to create discount"));
         
         logger.LogInformation($"Result : {resultCoupon}");
-        logger.LogInformation("Discount is successfully created. ProductName : {prodName}", coupon.ProductName);
+        logger.LogInformation("Discount is successfully created. ProductName : {prodName}", resultCoupon.ProductName);
         
         var couponModel = resultCoupon.Adapt<CouponModel>();
         return couponModel;
     }
-    //
-    // public override async Task<CouponModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
-    // {
-    //     var coupon = request.Coupon.Adapt<Coupon>();
-    //     if(coupon is null)
-    //         throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid request object"));
-    //     
-    //     discountContext.Coupons.Update(coupon);
-    //     await discountContext.SaveChangesAsync();
-    //     logger.LogInformation("Discount is successfully updated. ProductName : {prodName}", coupon.ProductName);
-    //     
-    //     var couponModel = coupon.Adapt<CouponModel>();
-    //     return couponModel;
-    // }
+    
+    public override async Task<CouponModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
+    {
+        var requestCoupon = request.Coupon.Adapt<Coupon>();
+        if(requestCoupon is null)
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid request object"));
+        
+        const string query = "UPDATE \"Coupons\" SET \"ProductName\" = @ProductName, \"Description\" = @Description, \"Amount\" = @Amount WHERE \"Id\" = @Id RETURNING *";
+        var resultCoupon = await _dbConnection.QueryFirstOrDefaultAsync<Coupon>(query, new
+        {
+            Id = requestCoupon.Id,
+            ProductName = requestCoupon.ProductName,
+            Description = requestCoupon.Description,
+            Amount = requestCoupon.Amount
+        });
+        
+        if (resultCoupon is null)
+            throw new RpcException(new Status(StatusCode.Internal, "Failed to update discount"));
+        
+        logger.LogInformation("Discount is successfully updated. ProductName : {prodName}", resultCoupon.ProductName);
+        
+        var couponModel = resultCoupon.Adapt<CouponModel>();
+        return couponModel;
+    }
     //
     // public override async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
     // {
