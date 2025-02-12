@@ -45,6 +45,16 @@ services:
     restart: always
     ports:
       - "6379:6379"
+  
+  orderdb:
+    image: mcr.microsoft.com/mssql/server
+    container_name: orderdb
+    environment:
+      SA_PASSWORD: "Password123"
+      ACCEPT_EULA: Y
+    restart: always
+    ports:
+      - "1433:1433"
 
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
