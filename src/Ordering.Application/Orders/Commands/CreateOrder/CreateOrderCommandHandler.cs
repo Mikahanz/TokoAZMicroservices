@@ -17,8 +17,6 @@ public class CreateOrderCommandHandler(IApplicationDbContext dbContext)
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return new CreateOrderResult(order.Id.Value);
-
-        throw new NotImplementedException();
     }
 
     private Order CreateNewOrder(OrderDto orderDto)
