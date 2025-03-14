@@ -18,8 +18,6 @@ public class GetOrdersByNameQueryHandler(IApplicationDbContext dbContext) : IQue
             .OrderBy(o => o.OrderName)
             .ToListAsync(cancellationToken);    
         
-        var orderDtos = orders.MapToOrderDtos();
-        
-        return new GetOrdersByNameResult(orderDtos);
+        return new GetOrdersByNameResult(orders.MapToOrderDtos());
     }
 }
