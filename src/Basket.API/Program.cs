@@ -1,4 +1,5 @@
 using BuildingBlocks.Exceptions.Handler;
+using BuildingBlocks.Messaging.MassTransit;
 using Discount.gRPC;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -44,6 +45,9 @@ var builder = WebApplication.CreateBuilder(args);
         handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
         return handler;
     });
+
+    // Asynchronous messaging using the AMQP protocol
+    builder.Services.AddMessageBroker(builder.Configuration);
 
     // Custom Exception Handler
     builder.Services.AddExceptionHandler<CustomExceptionHandler>();
