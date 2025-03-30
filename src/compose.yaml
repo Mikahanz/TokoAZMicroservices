@@ -53,8 +53,22 @@ services:
       SA_PASSWORD: "Password123"
       ACCEPT_EULA: Y
     restart: always
+    volumes:
+      - mssql_order:/var/lib/mssql/data
     ports:
       - "1433:1433"
+  
+  messagebroker:
+    image: rabbitmq:management
+    container_name: messagebroker
+    hostname: tokoaz-mq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
@@ -89,10 +103,14 @@ services:
       - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDb;User Id=postgres;Password=postgres;Include Error Detail=true
       - ConnectionStrings__Redis=distributedcache:6379
       - GrpcSettings__DiscountUrl=http://discount.grpc:8080
+      - MessageBroker__Host=amqp://tokoaz-mq:5672
+      - MessageBroker__UserName=guest
+      - MessageBroker__Password=guest
     depends_on:
       - basketdb
       - distributedcache
       - discount.grpc
+      - messagebroker
     ports:
       - "6061:8081"
       - "6001:8080"
@@ -118,6 +136,30 @@ services:
     volumes:
       - ./Discount.gRPC:/app
       - discount_grpc_data:/data
+        
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Ordering.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORT=8080
+      - ASPNETCORE_HTTPS_PORT=8081
+      - ConnectionStrings__Database=Server=orderdb;Database=OrderDb;User Id=sa;Password=Password123;Encrypt=False;TrustServerCertificate=True
+      - MessageBroker__Host=amqp://tokoaz-mq:5672
+      - MessageBroker__UserName=guest
+      - MessageBroker__Password=guest
+      - FeatureManagement__OrderFulfillment=false
+    depends_on:
+      - orderdb
+      - messagebroker
+    ports:
+        - "6063:8081"
+        - "6003:8080"
+    volumes:
+      - ./Ordering.API:/app
+      - order_api_data:/data
 
 volumes:
   postgres_catalog:
@@ -126,3 +168,6 @@ volumes:
   catalog_api_data:
   basket_api_data:
   discount_grpc_data:
+  order_api_data:
+  mssql_order:
+  
